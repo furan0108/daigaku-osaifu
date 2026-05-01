@@ -297,6 +297,49 @@ main { max-width: 600px; margin: 0 auto; padding: 20px 16px 80px; }
 .submit-btn.income-mode  { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 15px rgba(16,185,129,0.4); }
 .submit-btn.expense-mode { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 4px 15px rgba(239,68,68,0.4); }
 
+/* History subtotal */
+.history-subtotal {
+  display: flex;
+  align-items: center;
+  background: var(--card);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+  gap: 8px;
+}
+.history-sub-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+.history-sub-label {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.history-sub-amount {
+  font-size: clamp(0.78rem, 3vw, 0.95rem);
+  font-weight: 800;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.history-sub-amount.income  { color: var(--income); }
+.history-sub-amount.expense { color: var(--expense); }
+.history-sub-sep {
+  width: 1px;
+  height: 32px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
 /* Transaction list */
 .transaction-item {
   display: flex; align-items: center; gap: 12px;
