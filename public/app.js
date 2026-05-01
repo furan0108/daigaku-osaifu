@@ -251,32 +251,7 @@ function renderTransactions(list) {
     el.innerHTML = `<div class="empty-state"><div class="empty-emoji">📭</div><p>まだ記録がないよ！<br>最初の記録をしてみよう！</p></div>`;
     return;
   }
-
-  const incomeTotal  = list.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
-  const expenseTotal = list.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
-  const balance      = incomeTotal - expenseTotal;
-  const balanceStr   = (balance < 0 ? '-' : '') + fmt(Math.abs(balance));
-  const balanceClass = balance < 0 ? 'expense' : 'income';
-
-  const subtotal = `
-    <div class="history-subtotal">
-      <div class="history-sub-item">
-        <span class="history-sub-label">収入</span>
-        <span class="history-sub-amount income">${fmt(incomeTotal)}</span>
-      </div>
-      <div class="history-sub-sep"></div>
-      <div class="history-sub-item">
-        <span class="history-sub-label">支出</span>
-        <span class="history-sub-amount expense">${fmt(expenseTotal)}</span>
-      </div>
-      <div class="history-sub-sep"></div>
-      <div class="history-sub-item">
-        <span class="history-sub-label">収支</span>
-        <span class="history-sub-amount ${balanceClass}">${balanceStr}</span>
-      </div>
-    </div>`;
-
-  el.innerHTML = subtotal + list.map(t => {
+  el.innerHTML = list.map(t => {
     const cat  = (CATEGORIES[t.type] || []).find(c => c.id === t.category) || { emoji: '💰' };
     const sign = t.type === 'income' ? '+' : '-';
     return `
