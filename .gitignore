@@ -1,0 +1,4 @@
+node_modules/
+budget.db
+*.db-shm
+*.db-wal

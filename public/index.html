@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大学生のおサイフ帳</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="app-title">🎓 大学生のおサイフ帳</div>
+  <div class="app-subtitle">毎日の収支を楽しく記録しよう！</div>
+  <div class="mascot" id="mascot">😊</div>
+  <div class="month-nav">
+    <button id="prevMonth">‹</button>
+    <span id="currentMonth"></span>
+    <button id="nextMonth">›</button>
+  </div>
+</header>
+
+<main>
+  <section class="summary">
+    <div class="card income-card">
+      <div class="card-icon">💚</div>
+      <div class="card-label">収入</div>
+      <div class="card-amount" id="totalIncome">¥0</div>
+    </div>
+    <div class="card expense-card">
+      <div class="card-icon">💸</div>
+      <div class="card-label">支出</div>
+      <div class="card-amount" id="totalExpense">¥0</div>
+    </div>
+    <div class="card balance-card">
+      <div class="card-icon">💰</div>
+      <div class="card-label">残高</div>
+      <div class="card-amount" id="totalBalance">¥0</div>
+    </div>
+  </section>
+
+  <section class="spending-section">
+    <div class="spending-header">
+      <span class="spending-label">収入に対する支出の割合</span>
+      <span id="spendingPercent">0%</span>
+    </div>
+    <div class="bar-container">
+      <div class="bar-fill" id="spendingBar"></div>
+    </div>
+    <div id="spendingMessage" class="spending-message">記録を始めよう！📝</div>
+  </section>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="register">➕ 記録</button>
+    <button class="tab" data-tab="history">📋 履歴</button>
+    <button class="tab" data-tab="badges">🏆 実績</button>
+  </div>
+
+  <!-- 記録タブ -->
+  <div class="tab-content active" id="tab-register">
+    <div class="type-toggle">
+      <button class="type-btn" data-type="income">💚 収入</button>
+      <button class="type-btn active" data-type="expense">💸 支出</button>
+    </div>
+
+    <div class="form-section">
+      <div class="form-group">
+        <label>カテゴリ</label>
+        <div class="category-grid" id="categoryGrid"></div>
+      </div>
+
+      <div class="form-group">
+        <label>金額</label>
+        <div class="amount-input">
+          <span class="yen-sign">¥</span>
+          <input type="number" id="amount" placeholder="0" min="1" max="9999999">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>メモ（任意）</label>
+        <input type="text" id="description" placeholder="例：友達とランチ">
+      </div>
+
+      <div class="form-group">
+        <label>日付</label>
+        <input type="date" id="date">
+      </div>
+
+      <button class="submit-btn expense-mode" id="submitBtn">支出を登録！💸</button>
+    </div>
+  </div>
+
+  <!-- 履歴タブ -->
+  <div class="tab-content" id="tab-history">
+    <div id="transactionList">
+      <div class="empty-state">
+        <div class="empty-emoji">📭</div>
+        <p>まだ記録がないよ！<br>最初の記録をしてみよう！</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 実績タブ -->
+  <div class="tab-content" id="tab-badges">
+    <div id="badgeList"></div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+<canvas id="confettiCanvas"></canvas>
+
+<script src="app.js"></script>
+</body>
+</html>
