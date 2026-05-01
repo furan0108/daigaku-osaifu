@@ -103,6 +103,21 @@ app.get('/api/badges', (req, res) => {
   res.json(db.prepare("SELECT * FROM badges ORDER BY earned_at ASC").all());
 });
 
+app.get('/api/monthly', (req, res) => {
+  const months = [];
+  const now = new Date();
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    months.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`);
+  }
+  const data = months.map(m => {
+    const inc = db.prepare("SELECT COALESCE(SUM(amount),0) as t FROM transactions WHERE type='income' AND strftime('%Y-%m',date)=?").get(m);
+    const exp = db.prepare("SELECT COALESCE(SUM(amount),0) as t FROM transactions WHERE type='expense' AND strftime('%Y-%m',date)=?").get(m);
+    return { month: m, label: `${parseInt(m.split('-')[1])}月`, income: inc.t, expense: exp.t };
+  });
+  res.json(data);
+});
+
 app.listen(3000, () => {
   console.log('🎓 大学生のおサイフ帳 → http://localhost:3000');
 });

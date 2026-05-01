@@ -104,6 +104,27 @@ main { max-width: 600px; margin: 0 auto; padding: 20px 16px 80px; }
 .balance-card .card-amount { color: var(--primary); }
 .balance-card.negative .card-amount { color: var(--expense); }
 
+/* Chart */
+.chart-section {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+.chart-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+.chart-wrap {
+  position: relative;
+  height: 200px;
+}
+
 /* Spending bar */
 .spending-section {
   background: var(--card);

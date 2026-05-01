@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>大学生のおサイフ帳</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 </head>
 <body>
 
@@ -35,6 +36,13 @@
       <div class="card-icon">💰</div>
       <div class="card-label">残高</div>
       <div class="card-amount" id="totalBalance">¥0</div>
+    </div>
+  </section>
+
+  <section class="chart-section">
+    <div class="chart-title">📊 6ヶ月の収支グラフ</div>
+    <div class="chart-wrap">
+      <canvas id="budgetChart"></canvas>
     </div>
   </section>
 

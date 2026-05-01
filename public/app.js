@@ -32,6 +32,7 @@ const SPENDING_MSGS = [
 ];
 
 const state = { month: '', type: 'expense', category: '' };
+let budgetChart = null;
 
 // ── Init ──────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
@@ -44,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTypeToggle();
   renderCategoryGrid('expense');
   loadSummary();
+  loadMonthlyChart();
 });
 
 // ── Month navigation ──────────────────────────────────
@@ -118,6 +120,70 @@ function renderCategoryGrid(type) {
     });
     grid.appendChild(btn);
   });
+}
+
+// ── Monthly chart ─────────────────────────────────────
+async function loadMonthlyChart() {
+  try {
+    const data = await api('/api/monthly');
+    const ctx = document.getElementById('budgetChart').getContext('2d');
+
+    if (budgetChart) budgetChart.destroy();
+
+    budgetChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: data.map(d => d.label),
+        datasets: [
+          {
+            label: '収入',
+            data: data.map(d => d.income),
+            backgroundColor: 'rgba(16, 185, 129, 0.75)',
+            borderColor: 'rgba(16, 185, 129, 1)',
+            borderWidth: 2,
+            borderRadius: 6,
+          },
+          {
+            label: '支出',
+            data: data.map(d => d.expense),
+            backgroundColor: 'rgba(239, 68, 68, 0.75)',
+            borderColor: 'rgba(239, 68, 68, 1)',
+            borderWidth: 2,
+            borderRadius: 6,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: { usePointStyle: true, font: { size: 12 } },
+          },
+          tooltip: {
+            callbacks: {
+              label: c => ` ${c.dataset.label}: ¥${c.raw.toLocaleString('ja-JP')}`,
+            },
+          },
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { font: { size: 12 } },
+          },
+          y: {
+            beginAtZero: true,
+            grid: { color: 'rgba(0,0,0,0.05)' },
+            ticks: {
+              font: { size: 11 },
+              callback: v => v >= 10000 ? `¥${(v / 10000).toFixed(0)}万` : `¥${v.toLocaleString()}`,
+            },
+          },
+        },
+      },
+    });
+  } catch (e) { console.error(e); }
 }
 
 // ── API helpers ───────────────────────────────────────
@@ -293,6 +359,7 @@ document.getElementById('submitBtn').addEventListener('click', async () => {
     state.category = '';
     document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('selected'));
     loadSummary();
+    loadMonthlyChart();
 
   } catch (e) {
     showToast('エラーが発生しました', 'error');
