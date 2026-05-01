@@ -38,7 +38,7 @@ let budgetChart = null;
 document.addEventListener('DOMContentLoaded', () => {
   const now = new Date();
   state.month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-  document.getElementById('date').value = now.toISOString().split('T')[0];
+  document.getElementById('date').value = localDateStr(now);
 
   initMonthNav();
   initTabs();
@@ -60,6 +60,7 @@ function shiftMonth(delta) {
   const d = new Date(y, m - 1 + delta, 1);
   state.month = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
   updateMonthDisplay();
+  document.getElementById('date').value = `${state.month}-01`;
   loadSummary();
   if (document.getElementById('tab-history').classList.contains('active')) loadTransactions();
 }
@@ -222,6 +223,10 @@ async function loadBadges() {
 
 async function api(url, options) {
   const res = await fetch(url, options);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || `HTTPエラー ${res.status}`);
+  }
   return res.json();
 }
 
@@ -368,6 +373,10 @@ document.getElementById('submitBtn').addEventListener('click', async () => {
 
 // ── Helpers ───────────────────────────────────────────
 function fmt(n) { return '¥' + Number(n).toLocaleString('ja-JP'); }
+
+function localDateStr(d) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
 
 function showToast(message, type = 'success') {
   const t = document.getElementById('toast');
