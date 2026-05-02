@@ -196,7 +196,7 @@ async function loadSummary() {
     document.getElementById('totalExpense').textContent = fmt(data.expense);
 
     const balEl   = document.getElementById('totalBalance');
-    const balCard = balEl.closest('.card');
+    const balCard = balEl.closest('.balance-card');
     if (data.balance < 0) {
       balEl.textContent = '-' + fmt(Math.abs(data.balance));
       balCard.classList.add('negative');
