@@ -221,8 +221,8 @@ async function loadBadges() {
   } catch (e) { console.error(e); }
 }
 
-async function api(url, options) {
-  const res = await fetch(url, options);
+async function api(url, options = {}) {
+  const res = await fetch(url, { cache: 'no-store', ...options });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.error || `HTTPエラー ${res.status}`);
