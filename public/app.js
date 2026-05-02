@@ -234,7 +234,9 @@ async function api(url, options = {}) {
 // ── Spending bar ──────────────────────────────────────
 function updateSpendingBar(income, expense) {
   const pct = income > 0 ? Math.round((expense / income) * 100) : (expense > 0 ? 999 : 0);
-  const display = income > 0 ? `${pct}%` : (expense > 0 ? '∞%' : '0%');
+  const display = income > 0
+    ? (pct === 0 && expense > 0 ? '<1%' : `${pct}%`)
+    : (expense > 0 ? '∞%' : '0%');
   document.getElementById('spendingPercent').textContent = display;
 
   const bar = document.getElementById('spendingBar');
