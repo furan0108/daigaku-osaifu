@@ -363,11 +363,12 @@ document.getElementById('submitBtn').addEventListener('click', async () => {
     document.getElementById('description').value = '';
     state.category = '';
     document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('selected'));
-    loadSummary();
-    loadMonthlyChart();
 
   } catch (e) {
     showToast('エラーが発生しました', 'error');
+  } finally {
+    loadSummary();
+    loadMonthlyChart();
   }
 });
 
