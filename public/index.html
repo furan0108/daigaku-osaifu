@@ -7,101 +7,122 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins','Hiragino Sans','Yu Gothic','sans-serif'] },
+          backdropBlur: { xs: '2px' }
+        }
+      }
+    }
+  </script>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 </head>
-<body>
+<body class="font-poppins min-h-screen bg-gradient-to-br from-slate-900 via-violet-950 to-indigo-950">
 
-<header>
-  <div class="app-title">🎓 大学生のおサイフ帳</div>
-  <div class="app-subtitle">毎日の収支を楽しく記録しよう！</div>
-  <div class="mascot" id="mascot">😊</div>
-  <div class="month-nav">
-    <button id="prevMonth">‹</button>
-    <span id="currentMonth"></span>
-    <button id="nextMonth">›</button>
+<!-- ── Header ─────────────────────────── -->
+<header class="relative overflow-hidden text-center px-5 pt-8 pb-14">
+  <div class="pointer-events-none absolute -top-20 -right-16 h-72 w-72 rounded-full bg-violet-500/20 blur-3xl"></div>
+  <div class="pointer-events-none absolute -bottom-20 -left-14 h-56 w-56 rounded-full bg-indigo-500/20 blur-3xl"></div>
+  <div class="relative z-10 space-y-1">
+    <p class="text-xs font-semibold tracking-widest text-violet-300/70 uppercase">Student Budget</p>
+    <h1 class="text-2xl font-black text-white tracking-wide">🎓 おサイフ帳</h1>
+    <div id="mascot" class="py-3 text-5xl inline-block drop-shadow-lg">😊</div>
+    <div class="flex justify-center">
+      <div class="inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 px-5 py-2 backdrop-blur-md">
+        <button id="prevMonth" class="flex h-7 w-7 items-center justify-center rounded-full text-xl text-white transition hover:bg-white/20">‹</button>
+        <span id="currentMonth" class="min-w-[110px] text-center text-sm font-bold text-white"></span>
+        <button id="nextMonth" class="flex h-7 w-7 items-center justify-center rounded-full text-xl text-white transition hover:bg-white/20">›</button>
+      </div>
+    </div>
   </div>
 </header>
 
-<main>
-  <section class="summary">
-    <div class="card income-card">
-      <div class="card-icon">💚</div>
-      <div class="card-label">収入</div>
-      <div class="card-amount" id="totalIncome">¥0</div>
+<!-- ── Main ───────────────────────────── -->
+<main class="relative z-10 mx-auto max-w-lg -mt-8 px-4 pb-24">
+
+  <!-- Summary cards -->
+  <section class="grid grid-cols-3 gap-3 mb-4">
+    <div class="income-card min-w-0 rounded-2xl border border-white/15 bg-white/8 p-4 text-center backdrop-blur-xl transition-transform hover:-translate-y-1">
+      <div class="mb-1 text-2xl">💚</div>
+      <div class="text-[0.58rem] font-bold uppercase tracking-widest text-white/50">収入</div>
+      <div id="totalIncome" class="card-amount mt-1.5 font-black text-emerald-400">¥0</div>
     </div>
-    <div class="card expense-card">
-      <div class="card-icon">💸</div>
-      <div class="card-label">支出</div>
-      <div class="card-amount" id="totalExpense">¥0</div>
+    <div class="expense-card min-w-0 rounded-2xl border border-white/15 bg-white/8 p-4 text-center backdrop-blur-xl transition-transform hover:-translate-y-1">
+      <div class="mb-1 text-2xl">💸</div>
+      <div class="text-[0.58rem] font-bold uppercase tracking-widest text-white/50">支出</div>
+      <div id="totalExpense" class="card-amount mt-1.5 font-black text-rose-400">¥0</div>
     </div>
-    <div class="card balance-card">
-      <div class="card-icon">💰</div>
-      <div class="card-label">残高</div>
-      <div class="card-amount" id="totalBalance">¥0</div>
+    <div class="balance-card min-w-0 rounded-2xl border border-white/15 bg-white/8 p-4 text-center backdrop-blur-xl transition-transform hover:-translate-y-1">
+      <div class="mb-1 text-2xl">💰</div>
+      <div class="text-[0.58rem] font-bold uppercase tracking-widest text-white/50">残高</div>
+      <div id="totalBalance" class="card-amount mt-1.5 font-black text-violet-300">¥0</div>
     </div>
   </section>
 
-  <section class="chart-section">
-    <div class="chart-title">📊 6ヶ月の収支グラフ</div>
-    <div class="chart-wrap">
-      <canvas id="budgetChart"></canvas>
-    </div>
+  <!-- Chart -->
+  <section class="mb-4 rounded-2xl border border-white/15 bg-white/8 p-5 backdrop-blur-xl">
+    <div class="mb-3 text-[0.68rem] font-bold uppercase tracking-widest text-white/40">📊 6ヶ月の収支グラフ</div>
+    <div class="relative h-48"><canvas id="budgetChart"></canvas></div>
   </section>
 
-  <section class="spending-section">
-    <div class="spending-header">
-      <span class="spending-label">収入に対する支出の割合</span>
-      <span id="spendingPercent">0%</span>
+  <!-- Spending bar -->
+  <section class="mb-4 rounded-2xl border border-white/15 bg-white/8 px-5 py-4 backdrop-blur-xl">
+    <div class="mb-2.5 flex items-center justify-between text-sm">
+      <span class="font-semibold text-white/60">収入に対する支出の割合</span>
+      <span id="spendingPercent" class="font-black text-violet-300">0%</span>
     </div>
-    <div class="bar-container">
-      <div class="bar-fill" id="spendingBar"></div>
+    <div class="h-2.5 overflow-hidden rounded-full bg-white/10">
+      <div id="spendingBar" class="bar-fill" style="width:0%"></div>
     </div>
-    <div id="spendingMessage" class="spending-message">記録を始めよう！📝</div>
+    <div id="spendingMessage" class="mt-2 text-center text-xs text-white/35">記録を始めよう！📝</div>
   </section>
 
-  <div class="tabs">
-    <button class="tab active" data-tab="register">➕ 記録</button>
-    <button class="tab" data-tab="history">📋 履歴</button>
-    <button class="tab" data-tab="badges">🏆 実績</button>
+  <!-- Tabs -->
+  <div class="mb-4 flex gap-1.5 rounded-full border border-white/15 bg-white/8 p-1.5 backdrop-blur-xl">
+    <button class="tab active flex-1 rounded-full py-2.5 text-xs font-bold text-white/50 transition-all" data-tab="register">➕ 記録</button>
+    <button class="tab flex-1 rounded-full py-2.5 text-xs font-bold text-white/50 transition-all" data-tab="history">📋 履歴</button>
+    <button class="tab flex-1 rounded-full py-2.5 text-xs font-bold text-white/50 transition-all" data-tab="badges">🏆 実績</button>
   </div>
 
-  <!-- 記録タブ -->
+  <!-- Register tab -->
   <div class="tab-content active" id="tab-register">
-    <div class="type-toggle">
-      <button class="type-btn" data-type="income">💚 収入</button>
-      <button class="type-btn active" data-type="expense">💸 支出</button>
+    <div class="mb-4 flex gap-2.5">
+      <button class="type-btn flex-1 rounded-xl border-2 border-white/15 bg-white/5 py-3.5 text-sm font-bold text-white/40 transition-all" data-type="income">💚 収入</button>
+      <button class="type-btn active flex-1 rounded-xl border-2 border-white/15 bg-white/5 py-3.5 text-sm font-bold text-white/40 transition-all" data-type="expense">💸 支出</button>
     </div>
 
-    <div class="form-section">
-      <div class="form-group">
-        <label>カテゴリ</label>
-        <div class="category-grid" id="categoryGrid"></div>
+    <div class="rounded-2xl border border-white/15 bg-white/8 p-5 backdrop-blur-xl space-y-5">
+      <div>
+        <label class="mb-2.5 block text-[0.65rem] font-bold uppercase tracking-widest text-white/40">カテゴリ</label>
+        <div id="categoryGrid" class="category-grid"></div>
       </div>
-
-      <div class="form-group">
-        <label>金額</label>
-        <div class="amount-input">
-          <span class="yen-sign">¥</span>
-          <input type="number" id="amount" placeholder="0" min="1" max="9999999">
+      <div>
+        <label class="mb-2.5 block text-[0.65rem] font-bold uppercase tracking-widest text-white/40">金額</label>
+        <div class="flex overflow-hidden rounded-xl border-2 border-white/15 bg-white/5 transition focus-within:border-violet-500/70 focus-within:shadow-[0_0_0_3px_rgba(139,92,246,0.2)]">
+          <span class="border-r-2 border-white/15 bg-white/5 px-4 py-3.5 text-xl font-black text-white/40">¥</span>
+          <input type="number" id="amount" placeholder="0" min="1" max="9999999"
+            class="flex-1 bg-transparent px-4 py-3.5 text-2xl font-black text-white outline-none placeholder-white/20">
         </div>
       </div>
-
-      <div class="form-group">
-        <label>メモ（任意）</label>
-        <input type="text" id="description" placeholder="例：友達とランチ">
+      <div>
+        <label class="mb-2.5 block text-[0.65rem] font-bold uppercase tracking-widest text-white/40">メモ（任意）</label>
+        <input type="text" id="description" placeholder="例：友達とランチ"
+          class="w-full rounded-xl border-2 border-white/15 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder-white/25 transition focus:border-violet-500/70 focus:shadow-[0_0_0_3px_rgba(139,92,246,0.2)]">
       </div>
-
-      <div class="form-group">
-        <label>日付</label>
-        <input type="date" id="date">
+      <div>
+        <label class="mb-2.5 block text-[0.65rem] font-bold uppercase tracking-widest text-white/40">日付</label>
+        <input type="date" id="date"
+          class="w-full rounded-xl border-2 border-white/15 bg-white/5 px-4 py-3 text-sm text-white outline-none transition focus:border-violet-500/70 focus:shadow-[0_0_0_3px_rgba(139,92,246,0.2)]" style="color-scheme:dark">
       </div>
-
-      <button class="submit-btn expense-mode" id="submitBtn">支出を登録！💸</button>
+      <button id="submitBtn" class="submit-btn expense-mode">支出を登録！💸</button>
     </div>
   </div>
 
-  <!-- 履歴タブ -->
+  <!-- History tab -->
   <div class="tab-content" id="tab-history">
     <div id="transactionList">
       <div class="empty-state">
@@ -111,15 +132,14 @@
     </div>
   </div>
 
-  <!-- 実績タブ -->
+  <!-- Badges tab -->
   <div class="tab-content" id="tab-badges">
     <div id="badgeList"></div>
   </div>
 </main>
 
-<div class="toast" id="toast"></div>
-<canvas id="confettiCanvas"></canvas>
-
+<div id="toast" class="toast fixed bottom-7 left-1/2 z-50 whitespace-nowrap rounded-full border border-white/10 px-7 py-3.5 text-sm font-bold text-white shadow-2xl backdrop-blur-xl"></div>
+<canvas id="confettiCanvas" class="pointer-events-none fixed inset-0 z-[999] hidden"></canvas>
 <script src="app.js"></script>
 </body>
 </html>

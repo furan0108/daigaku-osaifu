@@ -160,7 +160,7 @@ async function loadMonthlyChart() {
         plugins: {
           legend: {
             position: 'top',
-            labels: { usePointStyle: true, font: { size: 12 } },
+            labels: { usePointStyle: true, font: { size: 12 }, color: 'rgba(255,255,255,0.7)' },
           },
           tooltip: {
             callbacks: {
@@ -171,13 +171,14 @@ async function loadMonthlyChart() {
         scales: {
           x: {
             grid: { display: false },
-            ticks: { font: { size: 12 } },
+            ticks: { font: { size: 12 }, color: 'rgba(255,255,255,0.5)' },
           },
           y: {
             beginAtZero: true,
-            grid: { color: 'rgba(0,0,0,0.05)' },
+            grid: { color: 'rgba(255,255,255,0.07)' },
             ticks: {
               font: { size: 11 },
+              color: 'rgba(255,255,255,0.5)',
               callback: v => v >= 10000 ? `¥${(v / 10000).toFixed(0)}万` : `¥${v.toLocaleString()}`,
             },
           },
