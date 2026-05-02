@@ -190,7 +190,7 @@ async function loadMonthlyChart() {
 // ── API helpers ───────────────────────────────────────
 async function loadSummary() {
   try {
-    const data = await api(`/api/summary?month=${state.month}`);
+    const data = await api('/api/summary');
     document.getElementById('totalIncome').textContent  = fmt(data.income);
     document.getElementById('totalExpense').textContent = fmt(data.expense);
 
